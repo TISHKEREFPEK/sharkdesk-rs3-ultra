@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>annotations</Nullable></PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="UiProgram.cs" />
+    <Compile Include="..\SharkDesk\MouseDevice*.cs" Link="%(Filename)%(Extension)" />
+    <Compile Include="..\SharkDesk\MouseSpec.cs" Link="MouseSpec.cs" />
+    <Compile Include="..\SharkDesk\MouseSettings.cs" Link="MouseSettings.cs" />
+    <Compile Include="..\SharkDesk\HubSettings.cs" Link="HubSettings.cs" />
+    <Compile Include="..\SharkDesk\BatteryStatus.cs" Link="BatteryStatus.cs" />
+    <Compile Include="..\SharkDesk\DongleSettings.cs" Link="DongleSettings.cs" />
+  </ItemGroup>
+</Project>

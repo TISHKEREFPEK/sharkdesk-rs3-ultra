@@ -1,0 +1,15 @@
+bin/
+obj/
+dist/
+tests/bin/
+tests/obj/
+*.user
+probe.json
+monitor-probe.json
+battery-runtime.json
+language.txt
+theme.txt
+profiles/
+backups/
+.env
+.env.*

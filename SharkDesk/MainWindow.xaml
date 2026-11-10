@@ -1,0 +1,496 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="SharkDesk.MainWindow" Title="SharkDesk · RS3 Ultra" Icon="Assets/SharkDesk.ico" Width="1120" Height="800" MinWidth="1000" MinHeight="720" Background="{DynamicResource PageBg}" Foreground="{DynamicResource TextColor}" FontFamily="Segoe UI Variable, Segoe UI" FontSize="14" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+  <FrameworkElement.Resources>
+    <ResourceDictionary>
+      <SolidColorBrush x:Key="PageBg" Color="#F3F5F8" />
+      <SolidColorBrush x:Key="SidebarBg" Color="#F9FAFC" />
+      <SolidColorBrush x:Key="CardBg" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="TextColor" Color="#202938" />
+      <SolidColorBrush x:Key="Muted" Color="#687487" />
+      <SolidColorBrush x:Key="LineColor" Color="#E3E7EE" />
+      <SolidColorBrush x:Key="InputBg" Color="#F3F5F8" />
+      <SolidColorBrush x:Key="ButtonBg" Color="#E9EDF3" />
+      <SolidColorBrush x:Key="Accent" Color="#5262D8" />
+      <SolidColorBrush x:Key="OnAccent" Color="#FFFFFF" />
+      <Style x:Key="{x:Type TextBlock}" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap" />
+      </Style>
+      <Style x:Key="{x:Type Button}" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="Background" Value="{DynamicResource ButtonBg}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type Button}">
+              <Border Name="B" Background="{TemplateBinding Control.Background}" CornerRadius="7" Padding="{TemplateBinding Control.Padding}">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="UIElement.IsMouseOver" Value="True">
+                  <Setter TargetName="B" Property="UIElement.Opacity" Value="0.8" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                  <Setter TargetName="B" Property="UIElement.Opacity" Value="0.4" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource InputBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="TextBoxBase.CaretBrush" Value="{DynamicResource TextColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LineColor}" />
+        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type TextBox}">
+              <Border Name="InputSurface" Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="7" Padding="0">
+                <ScrollViewer Name="PART_ContentHost" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="InputSurface" Property="BorderBrush" Value="{DynamicResource Accent}" /></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="Background" Value="#00FFFFFF" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+              <Border Name="Item" Background="{TemplateBinding Control.Background}" CornerRadius="6" Padding="{TemplateBinding Control.Padding}">
+                <ContentPresenter />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
+                  <Setter TargetName="Item" Value="{DynamicResource ButtonBg}" Property="Border.Background" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+        <Setter Property="Padding" Value="12,9" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="Background" Value="{DynamicResource InputBg}" />
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ComboBox}">
+              <Grid>
+                <ToggleButton Foreground="{DynamicResource TextColor}" Focusable="False" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                  <Control.Template>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                      <Border Background="{DynamicResource InputBg}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7">
+                        <Grid>
+                          <ContentPresenter Margin="12,9,30,9" VerticalAlignment="Center" Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" />
+                          <TextBlock Text="⌄" Foreground="{DynamicResource Muted}" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" />
+                        </Grid>
+                      </Border>
+                    </ControlTemplate>
+                  </Control.Template>
+                </ToggleButton>
+                <Popup Name="PART_Popup" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False">
+                  <Border Background="{DynamicResource CardBg}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7" Padding="5" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                    <ScrollViewer MaxHeight="260">
+                      <ItemsPresenter />
+                    </ScrollViewer>
+                  </Border>
+                </Popup>
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type CheckBox}" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type CheckBox}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="46" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Name="Track" Width="36" Height="22" CornerRadius="11" Background="{DynamicResource ButtonBg}" HorizontalAlignment="Left">
+                  <Ellipse Name="Thumb" Width="16" Height="16" Fill="#FFFFFFFF" HorizontalAlignment="Left" Margin="3,0" />
+                </Border>
+                <ContentPresenter Grid.Column="1" VerticalAlignment="Center" />
+              </Grid>
+              <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                  <Setter TargetName="Track" Value="{DynamicResource Accent}" Property="Border.Background" />
+                  <Setter TargetName="Thumb" Value="{DynamicResource OnAccent}" Property="Shape.Fill" />
+                  <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type RadioButton}" TargetType="{x:Type RadioButton}">
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type RadioButton}">
+              <Border Name="Radio" CornerRadius="7" Padding="8,5" Background="{DynamicResource ButtonBg}">
+                <ContentPresenter HorizontalAlignment="Center" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                  <Setter TargetName="Radio" Value="{DynamicResource Accent}" Property="Border.Background" />
+                  <Setter Value="{DynamicResource OnAccent}" Property="Foreground" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                  <Setter TargetName="Radio" Property="UIElement.Opacity" Value="0.35" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="Card" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="{DynamicResource CardBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LineColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Border.CornerRadius" Value="10" />
+        <Setter Property="Border.Padding" Value="20" />
+      </Style>
+      <Style x:Key="Label" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{DynamicResource Muted}" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+      </Style>
+      <Style TargetType="ScrollBar">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ScrollBar">
+              <Grid Background="Transparent">
+                <Track x:Name="PART_Track" IsDirectionReversed="True">
+                  <Track.Thumb>
+                    <Thumb>
+                      <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                          <Border x:Name="Bar" Width="4" CornerRadius="2" Background="{DynamicResource Muted}" Opacity="0.3" Margin="2,0" />
+                          <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                              <Setter TargetName="Bar" Property="Opacity" Value="0.65" />
+                            </Trigger>
+                          </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                      </Thumb.Template>
+                    </Thumb>
+                  </Track.Thumb>
+                </Track>
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style TargetType="TabControl">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0,16,0,0" />
+      </Style>
+      <Style TargetType="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource Muted}" />
+        <Setter Property="Padding" Value="15,8" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="TabItem">
+              <Border x:Name="Tab" Padding="{TemplateBinding Padding}" BorderThickness="0,0,0,2" BorderBrush="Transparent">
+                <ContentPresenter ContentSource="Header" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+                  <Setter TargetName="Tab" Property="BorderBrush" Value="{DynamicResource Accent}" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                  <Setter TargetName="Tab" Property="Background" Value="{DynamicResource ButtonBg}" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style TargetType="Slider">
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="Maximum" Value="1" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Slider">
+              <Grid VerticalAlignment="Center">
+                <Border Height="4" CornerRadius="2" Background="{DynamicResource ButtonBg}" />
+                <Track x:Name="PART_Track">
+                  <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="Slider.DecreaseLarge" Background="Transparent">
+                      <RepeatButton.Template>
+                        <ControlTemplate TargetType="RepeatButton">
+                          <Border Background="Transparent" />
+                        </ControlTemplate>
+                      </RepeatButton.Template>
+                    </RepeatButton>
+                  </Track.DecreaseRepeatButton>
+                  <Track.Thumb>
+                    <Thumb Width="16" Height="16">
+                      <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                          <Ellipse Fill="{DynamicResource Accent}" Stroke="{DynamicResource CardBg}" StrokeThickness="2" />
+                        </ControlTemplate>
+                      </Thumb.Template>
+                    </Thumb>
+                  </Track.Thumb>
+                  <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="Slider.IncreaseLarge" Background="Transparent">
+                      <RepeatButton.Template>
+                        <ControlTemplate TargetType="RepeatButton">
+                          <Border Background="Transparent" />
+                        </ControlTemplate>
+                      </RepeatButton.Template>
+                    </RepeatButton>
+                  </Track.IncreaseRepeatButton>
+                </Track>
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </FrameworkElement.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="192" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Border Background="{DynamicResource SidebarBg}" BorderBrush="{DynamicResource LineColor}" BorderThickness="0,0,1,0" Padding="16,25,16,18">
+      <DockPanel Margin="0">
+        <StackPanel DockPanel.Dock="Top">
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,32">
+            <Image Source="Assets/SharkDesk.png" Width="24" Height="24" Margin="0,0,8,0" />
+            <TextBlock Text="SharkDesk" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" />
+          </StackPanel>
+          <Button Name="SensorNav" Content="{DynamicResource S1}" Background="{DynamicResource ButtonBg}" HorizontalContentAlignment="Left" Margin="0,3,0,0" Click="ShowSensor" Padding="10,10" />
+          <Button Name="ProfilesNav" Content="{DynamicResource S2}" HorizontalContentAlignment="Left" Margin="0,3,0,0" Click="ShowProfiles" Padding="10,10" />
+          <Button Name="DongleNav" Content="{DynamicResource S3}" HorizontalContentAlignment="Left" Margin="0,3,0,0" Click="ShowDongle" Padding="10,10" />
+          <Button Name="SettingsNav" Content="{DynamicResource S4}" HorizontalContentAlignment="Left" Margin="0,3,0,0" Click="ShowSettings" Padding="10,10" />
+          <Button Name="AboutNav" Content="{DynamicResource S5}" HorizontalContentAlignment="Left" Click="ShowAbout" Margin="0,3,0,0" Padding="10,10" />
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+          <Button Name="ThemeButton" Content="{DynamicResource S6}" Margin="0,24,0,0" Click="ToggleTheme" />
+          <Border Height="1" Background="{DynamicResource LineColor}" Margin="0,24" />
+          <TextBlock Name="ModelSidebar" Text="ATTACK SHARK" FontWeight="SemiBold" />
+          <TextBlock Name="SensorSidebar" Text="{DynamicResource S7}" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,5,0,14" />
+          <TextBlock Text="RS3 Ultra Edition 0.5.1" Foreground="{DynamicResource Muted}" FontSize="11" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <Grid Column="1" Margin="28,24,24,18">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <Grid Margin="0,0,0,12">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="230" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+          <TextBlock Name="PageTitle" Text="{DynamicResource S8}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+          <Grid Width="38" Height="19" Margin="0,0,8,0">
+            <Border Name="BatteryOutline" BorderBrush="#159447" BorderThickness="1.5" CornerRadius="4" Margin="0,0,4,0" />
+            <Border Name="BatteryTip" Width="3" Height="7" Background="#159447" HorizontalAlignment="Right" />
+            <Border Name="BatteryFill" Width="0" Height="11" CornerRadius="2" HorizontalAlignment="Left" Margin="4,0,0,0" Background="#159447" />
+            <Path Name="ChargingBolt" Data="M18,2.5 L10.5,10 L16,10 L13.5,16.5 L23.5,7 L18,7" Fill="#FFFFFFFF" Stroke="#159447" StrokeThickness="0.8" Visibility="Collapsed" />
+          </Grid>
+          <TextBlock Name="BatteryPercent" Text="— %" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <TextBlock Name="ConnectionLabel" Text="{DynamicResource S11}" Foreground="{DynamicResource Muted}" FontSize="11" Margin="14,0,0,0" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+      <ScrollViewer Name="MainScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
+        <Grid>
+          <StackPanel Name="SensorPage">
+            <TabControl>
+              <TabItem Header="DPI">
+                <StackPanel>
+                  <Border Style="{StaticResource Card}" Margin="0,0,0,0" Padding="22,16,22,16">
+                    <StackPanel>
+                      <DockPanel Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                          <TextBlock Text="Ступеней" VerticalAlignment="Center" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,0,10,0" />
+                          <ComboBox Name="CountBox" SelectionChanged="Edited" MinWidth="60" />
+                        </StackPanel>
+                        <TextBlock Text="Ступени DPI" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                      </DockPanel>
+                      <UniformGrid Name="DpiPanel" Columns="1" />
+                    </StackPanel>
+                  </Border>
+                  <Grid Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition />
+                      <ColumnDefinition />
+                      <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,14,0" Grid.Column="0">
+                      <TextBlock Text="Частота опроса" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,0,0,7" />
+                      <ComboBox Name="RateBox" SelectionChanged="Edited" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,14,0" Grid.Column="1">
+                      <TextBlock Text="Высота отрыва" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,0,0,7" />
+                      <ComboBox Name="LodBox" SelectionChanged="Edited" />
+                    </StackPanel>
+                    <StackPanel Margin="0" Grid.Column="2">
+                      <TextBlock Text="Задержка клика, мс" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,0,0,7" />
+                      <TextBox Name="DebounceBox" TextChanged="Edited" Height="40" Padding="10,7" />
+                    </StackPanel>
+                  </Grid>
+                </StackPanel>
+              </TabItem>
+              <TabItem Header="Сенсор">
+                <StackPanel>
+                  <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                      <CheckBox Name="SyncBox" Content="{DynamicResource S25}" Click="Edited" />
+                      <CheckBox Name="AngleBox" Content="{DynamicResource S26}" Click="Edited" />
+                      <CheckBox Name="RippleBox" Content="{DynamicResource S27}" Click="Edited" />
+                      <Grid Margin="0,12,0,0">
+                        <TextBlock Text="Переход в сон" VerticalAlignment="Center" />
+                        <ComboBox Name="SleepBox" HorizontalAlignment="Right" Width="160" SelectionChanged="Edited" />
+                      </Grid>
+                    </StackPanel>
+                  </Border>
+                  <StackPanel Margin="0,14,0,0" x:Name="AdvancedHost" />
+                </StackPanel>
+              </TabItem>
+            </TabControl>
+          </StackPanel>
+          <StackPanel Name="ProfilesPage" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource S29}" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="{DynamicResource S30}" Foreground="{DynamicResource Muted}" Margin="0,12,0,24" />
+                <TextBlock Text="{DynamicResource S31}" Style="{StaticResource Label}" />
+                <TextBox Name="ProfileName" Text="{DynamicResource S32}" MaxLength="60" />
+                <Button Content="{DynamicResource S33}" HorizontalAlignment="Left" Margin="0,16,0,24" Click="SaveProfile" />
+                <TextBlock Text="{DynamicResource S34}" Style="{StaticResource Label}" />
+                <ComboBox Name="ProfilesList" />
+                <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                  <Button Content="{DynamicResource S35}" Margin="0,0,12,0" Click="LoadProfile" />
+                  <Button Content="{DynamicResource S36}" Margin="0,0,12,0" Click="ExportProfile" />
+                  <Button Content="{DynamicResource S37}" Click="ImportProfile" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Name="DonglePage" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource S38}" FontSize="20" FontWeight="SemiBold" />
+                <UniformGrid Columns="3" Margin="0,18,0,0">
+                  <StackPanel Margin="0,0,12,0">
+                    <TextBlock Text="LED 1" Style="{StaticResource Label}" />
+                    <ComboBox Name="Led1Box" Margin="0,0,0,14" />
+                  </StackPanel>
+                  <StackPanel Margin="0,0,12,0">
+                    <TextBlock Text="LED 2" Style="{StaticResource Label}" />
+                    <ComboBox Name="Led2Box" Margin="0,0,0,14" />
+                  </StackPanel>
+                  <StackPanel Margin="0">
+                    <TextBlock Text="LED 3" Style="{StaticResource Label}" />
+                    <ComboBox Name="Led3Box" />
+                  </StackPanel>
+                </UniformGrid>
+                <TextBlock Name="DongleStatus" Text="{DynamicResource S40}" Foreground="{DynamicResource Muted}" Margin="0,20,0,16" />
+                <WrapPanel>
+                  <Button Name="DongleReadButton" Content="Обновить" Click="ReadDongle" Margin="0,0,8,0" />
+                  <Button Name="DongleApplyButton" Content="Применить к приёмнику" Click="ApplyDongle" IsEnabled="False" />
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource S53}" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="{DynamicResource S54}" Foreground="{DynamicResource Muted}" Margin="0,10,0,20" Visibility="Collapsed" />
+                <TextBlock Text="{DynamicResource S55}" Style="{StaticResource Label}" />
+                <ComboBox Name="LightModeBox" Margin="0,0,0,16" SelectionChanged="LightingEdited" />
+                <TextBlock Text="{DynamicResource S56}" Style="{StaticResource Label}" />
+                <Slider Name="BrightnessSlider" Minimum="1" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" Value="1" Margin="0,0,0,16" />
+                <TextBlock Text="{DynamicResource S57}" Style="{StaticResource Label}" />
+                <Slider Name="SpeedSlider" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" Value="3" Margin="0,0,0,20" />
+                <Button Name="LightingApplyButton" Content="{DynamicResource S58}" HorizontalAlignment="Left" IsEnabled="False" Click="ApplyLighting" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Name="SettingsPage" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource S59}" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="{DynamicResource S60}" Style="{StaticResource Label}" Margin="0,20,0,8" />
+                <ComboBox Name="LanguageBox" SelectionChanged="LanguageChanged" />
+                <TextBlock Text="{DynamicResource S61}" Foreground="{DynamicResource Muted}" Margin="0,10,0,20" />
+                <CheckBox Name="StartupBox" Content="{DynamicResource S62}" Click="StartupChanged" />
+                <Button Content="{DynamicResource S63}" HorizontalAlignment="Left" Margin="0,10,0,0" Click="OpenMouseSettings" />
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource S64}" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Name="VersionsText" Text="{DynamicResource S65}" Foreground="{DynamicResource Muted}" Margin="0,12,0,20" />
+                <WrapPanel>
+                  <Button Content="{DynamicResource S66}" Tag="firmware" Margin="0,0,12,8" Click="OpenOfficialTool" />
+                  <Button Content="{DynamicResource S67}" Tag="pairing" Margin="0,0,12,8" Click="OpenOfficialTool" />
+                  <Button Content="{DynamicResource S68}" Tag="reset" Margin="0,0,0,8" Click="OpenOfficialTool" />
+                </WrapPanel>
+                <TextBlock Text="{DynamicResource S69}" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,10,0,0" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Name="AboutPage" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}">
+              <StackPanel>
+                <TextBlock Text="Если мышь не отвечает" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="Разбуди мышь и проверь кабель или приёмник. Закрой официальный HUB, если он открыт." Foreground="{DynamicResource Muted}" Margin="0,16,0,0" />
+                <TextBlock Text="Подключение восстанавливается автоматически." Foreground="{DynamicResource Muted}" Margin="0,10,0,0" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Grid>
+      </ScrollViewer>
+      <Border Grid.Row="2" BorderBrush="{DynamicResource LineColor}" BorderThickness="0,1,0,0" Padding="0,18,0,0" Margin="0,16,0,0">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Name="StatusText" Text="{DynamicResource S77}" Foreground="{DynamicResource Muted}" VerticalAlignment="Center" Margin="0,0,16,0" FontSize="12" TextWrapping="Wrap" MaxHeight="34" TextTrimming="CharacterEllipsis" />
+          <Button Name="ReadButton" Grid.Column="1" Content="Обновить" Margin="0,0,12,0" Click="ReadDevice" />
+          <Button Name="ApplyButton" Grid.Column="2" Content="Применить" Background="{DynamicResource Accent}" Foreground="{DynamicResource OnAccent}" FontWeight="SemiBold" IsEnabled="False" Click="ApplyDevice" />
+        </Grid>
+      </Border>
+      <StackPanel Visibility="Collapsed">
+        <TextBlock Name="BatteryRemaining" Text="" Foreground="{DynamicResource Muted}" FontSize="11" Margin="0,7,0,0" />
+        <TextBlock Name="BatteryState" Text="{DynamicResource S10}" Foreground="{DynamicResource Muted}" FontSize="10" Margin="0,5,0,0" />
+        <TextBlock Name="DeviceSummary" Text="{DynamicResource S12}" Foreground="{DynamicResource Muted}" />
+        <TextBlock Name="ModelHeading" Text="Attack Shark" FontSize="28" FontWeight="SemiBold" Margin="0,4,0,10" />
+        <TextBlock Name="FirmwareLabel" Text="{DynamicResource S13}" Foreground="{DynamicResource Muted}" FontSize="12" Margin="0,8,0,0" />
+        <TextBlock Name="DpiLimitsLabel" Text="{DynamicResource S17}" FontSize="11" Foreground="{DynamicResource Muted}" Margin="0,12,0,0" Visibility="Collapsed" />
+      </StackPanel>
+    </Grid>
+  </Grid>
+</Window>

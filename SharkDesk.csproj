@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>SharkDesk</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>True</UseWPF>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>annotations</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="SharkDesk.Languages.en.json" />
+    <None Remove="SharkDesk.Languages.ru.json" />
+    <None Remove="SharkDesk.THIRD-PARTY-NOTICES.txt" />
+    <None Remove="SharkDesk.Licenses.NET-Runtime.txt" />
+    <None Remove="SharkDesk.Licenses.WindowsDesktop.txt" />
+    <EmbeddedResource Include="SharkDesk.Languages.en.json" LogicalName="SharkDesk.Languages.en.json" WithCulture="false" />
+    <EmbeddedResource Include="SharkDesk.Languages.ru.json" LogicalName="SharkDesk.Languages.ru.json" WithCulture="false" />
+    <EmbeddedResource Include="SharkDesk.THIRD-PARTY-NOTICES.txt" LogicalName="SharkDesk.THIRD-PARTY-NOTICES.txt" />
+    <EmbeddedResource Include="SharkDesk.Licenses.NET-Runtime.txt" LogicalName="SharkDesk.Licenses.NET-Runtime.txt" />
+    <EmbeddedResource Include="SharkDesk.Licenses.WindowsDesktop.txt" LogicalName="SharkDesk.Licenses.WindowsDesktop.txt" />
+    <Page Remove="SharkDesk\MainWindow.xaml" />
+    <Page Include="SharkDesk\MainWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="mainwindow.xaml" />
+    <Resource Remove="assets\sharkdesk.ico" />
+    <Resource Remove="assets\sharkdesk.png" />
+    <Resource Include="assets\sharkdesk.ico" LogicalName="assets/sharkdesk.ico" />
+    <Resource Include="assets\sharkdesk.png" LogicalName="assets/sharkdesk.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Remove="tests\**\*.cs" />
+    <None Remove="tests\**\*" />
+  </ItemGroup>
+</Project>
